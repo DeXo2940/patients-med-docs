@@ -133,12 +133,12 @@ class App extends React.Component {
   patientComponent() {
     return (
       <div>
-        <h1> Informacje o pacjencie </h1>
+        <h2> Informacje o pacjencie </h2>
         <div>
-          <p>Imię: {this.state.patientData.patient.name[0].given[0]} </p>
-          <p>Nazwisko: {this.state.patientData.patient.name[0].family} </p>
+          <p><strong className="text-muted">Imię:</strong> {this.state.patientData.patient.name[0].given[0]} </p>
+          <p><strong className="text-muted">Nazwisko:</strong> {this.state.patientData.patient.name[0].family} </p>
           <p>
-            Płeć podczas narodzin/obecnie:{" "}
+            <strong className="text-muted">Płeć podczas narodzin/obecnie:</strong>{" "}
             {this.state.patientData.patient.extension[4].valueCode == "F"
               ? "Kobieta"
               : "Mężczyzna"}/
@@ -161,10 +161,10 @@ class App extends React.Component {
               <Card>
                 <CardBody>
                   <p>
-                    Data urodzenia: {this.state.patientData.patient.birthDate}{" "}
+                    <strong className="text-muted">Data urodzenia:</strong> {this.state.patientData.patient.birthDate}{" "}
                   </p>
                   <p>
-                    Miejsce urodzenia:{" "}
+                    <strong className="text-muted">Miejsce urodzenia:</strong>{" "}
                     {this.state.patientData.patient.extension[2].valueAddress
                       .city +
                       " " +
@@ -175,7 +175,7 @@ class App extends React.Component {
                         .state}{" "}
                   </p>
                   <p>
-                    Czy ma rodzeństwo:{" "}
+                    <strong className="text-muted">Czy ma rodzeństwo:</strong>{" "}
                     {this.state.patientData.patient.multipleBirthBoolean == true
                       ? "Tak"
                       : "Nie"}{" "}
@@ -199,11 +199,11 @@ class App extends React.Component {
                   <CardBody>
                     {" "}
                     <p>
-                      Matka:{" "}
+                  <strong className="text-muted">    Matka:</strong>{" "}
                       {this.state.patientData.patient.extension[3].valueString}{" "}
                     </p>
                     <p>
-                      Ojciec:{" "}
+                    <strong className="text-muted">  Ojciec:</strong>{" "}
                       {
                         this.state.patientData.patient.extension[7]
                           .valueHumanName.text
@@ -214,7 +214,7 @@ class App extends React.Component {
               </Collapse>
             </div>
             <p>
-              Rasa, Grupa etniczna:{" "}
+          <strong className="text-muted">    Rasa, Grupa etniczna:</strong>{" "}
               {
                 this.state.patientData.patient.extension[0].valueCodeableConcept
                   .coding[0].display
@@ -227,28 +227,28 @@ class App extends React.Component {
           </div>
 
           <p>
-            Język:{" "}
+            <strong className="text-muted">Język:</strong>{" "}
             {
               this.state.patientData.patient.communication[0].language.coding[0]
                 .display
             }{" "}
           </p>
           <p>
-            Numer ubezpieczenia:{" "}
+  <strong className="text-muted">          Numer ubezpieczenia:</strong>{" "}
             {this.state.patientData.patient.extension[8].valueString}{" "}
           </p>
           <p>
-            Lekarz rodzinny:{" "}
+            <strong className="text-muted">Lekarz rodzinny:</strong>{" "}
             {this.state.patientData.patient.generalPractitioner[0].reference}{" "}
           </p>
           <p>
-            Czy wymagana opieka:{" "}
+            <strong className="text-muted">Czy wymagana opieka:</strong>{" "}
             {this.state.patientData.patient.extension[5].valueBoolean == true
               ? "Tak"
               : "Nie"}{" "}
           </p>
           <p>
-            Stan cywilny: {this.state.patientData.patient.maritalStatus.text}{" "}
+          <strong className="text-muted">  Stan cywilny:</strong> {this.state.patientData.patient.maritalStatus.text}{" "}
           </p>
 
           <div>
@@ -259,37 +259,37 @@ class App extends React.Component {
               style={{marginBottom: "1rem"}}
             >
               {" "}
-              Dane adresowe #RODO
+            <strong className="text-muted">  Dane adresowe #RODO</strong>
             </Button>{" "}
             {""}
             <Collapse isOpen={this.state.collapse}>
               <Card>
                 <CardBody>
                   <p>
-                    Kraj: {this.state.patientData.patient.address[0].country}{" "}
+                  <strong className="text-muted">  Kraj: </strong> {this.state.patientData.patient.address[0].country}{" "}
                   </p>
                   <p>
-                    Stan: {this.state.patientData.patient.address[0].state}{" "}
+                <strong className="text-muted">    Stan: </strong> {this.state.patientData.patient.address[0].state}{" "}
                   </p>
                   <p>
-                    Miasto: {this.state.patientData.patient.address[0].city}{" "}
+                  <strong className="text-muted">  Miasto: </strong> {this.state.patientData.patient.address[0].city}{" "}
                   </p>
                   <p>
-                    Kod pocztowy:{" "}
+                  <strong className="text-muted">  Kod pocztowy: </strong>{" "}
                     {this.state.patientData.patient.address[0].postalCode}{" "}
                   </p>
                   <p>
-                    Adres: {this.state.patientData.patient.address[0].line[0]}{" "}
+                  <strong className="text-muted">  Adres:</strong> {this.state.patientData.patient.address[0].line[0]}{" "}
                   </p>
                   <p>
-                    Adres2:{" "}
+                  <strong className="text-muted">  Adres2: </strong>{" "}
                     {this.state.patientData.patient.address[0].line[1] ===
                     undefined
                       ? "- - -"
                       : this.state.patientData.patient.address[0].line[1]}{" "}
                   </p>
                   <p>
-                    Telefon: {this.state.patientData.patient.telecom[0].value}{" "}
+                  <strong className="text-muted">  Telefon: </strong> {this.state.patientData.patient.telecom[0].value}{" "}
                   </p>
                 </CardBody>
               </Card>
@@ -297,19 +297,19 @@ class App extends React.Component {
           </div>
 
           <p>
-            Czy osoba fikcyjna:{" "}
+          <strong className="text-muted">  Czy osoba fikcyjna: </strong>{" "}
             {this.state.patientData.patient.extension[6].valueBoolean == true
               ? "Tak"
               : "Nie"}{" "}
           </p>
           <p>
-            Data śmierci:{" "}
+          <strong className="text-muted">  Data śmierci: </strong>{" "}
             {this.state.patientData.patient.deceasedDateTime === undefined
               ? "- - -"
               : this.state.patientData.patient.deceasedDateTime}{" "}
           </p>
           <p>
-            Ostatnia aktualizacja:{" "}
+          <strong className="text-muted">  Ostatnia aktualizacja: </strong>{" "}
             {this.state.patientData.patient.meta.lastUpdated}{" "}
           </p>
         </div>
@@ -320,7 +320,7 @@ class App extends React.Component {
   listComponent() {
     return (
       <div>
-        <ListGroup>
+        <ListGroup style={{margin: "1rem"}}>
           {this.state.hits.map(hit => (
             <ListGroupItem
               tag="a"
@@ -337,7 +337,7 @@ class App extends React.Component {
     );
   }
   photo() {
-    return <img width="100%" src={cat} />;
+    return <img style={{border: '1px dashed #021a40'}} width="100%" src={cat} />;
   }
 
   b1() {
@@ -358,14 +358,14 @@ class App extends React.Component {
 
   filter (but) {
       return (
-
-      <Form onSubmit={this.fi} inline>
+      <div>  {but}
+      <Form onSubmit={this.fi} inline className="float-right">
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-        {but}
+
           <Label for="exampleEmail" className="mr-sm-2">Wyszukaj po nazwisku: </Label>
           <Input name="surname" value={this.state.filt} id="exampleEmail" onChange={this.fi.bind(this)} placeholder="nazwisko" />
         </FormGroup></Form>
-      )
+      </div>)
 
   }
 
@@ -411,7 +411,7 @@ class App extends React.Component {
     }}
     return (
       <div>
-        <Navbar color="light" light expand="lg">
+        <Navbar style={{marginBottom: "1rem", borderBottom: '1px dashed #000000'}} color="light" light expand="lg">
           <img width="3%" src={icon} />
           <NavbarBrand href="/">mediCATion</NavbarBrand>
         </Navbar>
@@ -423,12 +423,12 @@ class App extends React.Component {
           </Row>
           <Row>
             <Col sm="2">{photo}</Col>
-            <Col sm="10" md={{size: 8}}>
+            <Col sm="8">
               {func}
             </Col>
           </Row>
           <Row>
-            <Col sm="4" md={{size: 8, offset: 2}}>
+            <Col sm="4" md={{size: 10, offset: 2}}>
               {but}
             </Col>
           </Row>
