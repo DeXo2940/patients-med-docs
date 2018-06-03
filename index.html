@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pierwszy komponent w React.js</title>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone/babel.js"></script>
+	<script type="text/babel">
+export class App extends React.Component {
+  state = {
+    contacts: []
+  };
+
+  componentDidMount() {
+    fetch("https://randomuser.me/api/?format=json&results=10")
+      .then(res => res.json())
+      .then(json => this.setState({ contacts: json.results }));
+  }
+
+  render() {
+    return (
+      <div>
+        <AppHeader />
+        <main className="ui main text container">
+          <ContactsList contacts={this.state.contacts} />
+        </main>
+      </div>
+    );
+  }
+}
+
+
+
+export const ContactItem = ({ avatarUrl, name, phone }) => {
+  return (
+    <li className="item">
+      <img src={avatarUrl} className="ui mini rounded image" alt="" />
+      <div className="content">
+        <h4 className="header">{name}</h4>
+        <div className="description">{phone}</div>
+      </div>
+    </li>
+  );
+};
+
+
+export class ContactsList extends React.Component {
+  contactToContactItem = contact => {
+    const avatarUrl = contact.picture.thumbnail;
+    const { title, first, last } = contact.name;
+    const name = `${title} ${first} ${last}`.trim();
+    const phone = contact.phone;
+    return <ContactItem key={key} avatarUrl={avatarUrl} name={name} phone={phone} />;
+  };
+
+  render() {
+    return (
+      <ul className="ui relaxed divided list selection">
+        {this.props.contacts.map(this.contactToContactItem)}
+      </ul>
+    );
+  }
+}
+ReactDOM.render(<App />, document.getElementById("app"));
+</script>
+
+<style type="text/css">.kupa {
+color: green;
+}
+</style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+</body>
+
+</html>
