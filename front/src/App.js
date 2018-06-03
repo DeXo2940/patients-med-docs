@@ -1,5 +1,23 @@
 import * as React from "react";
 import "./App.css";
+import {Button} from "reactstrap";
+import {ListGroup, ListGroupItem} from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,9 +40,8 @@ class App extends React.Component {
       });
     } else {
       this.setState({
-        i:1,
+        i: 1,
         text: "Nastepna strona"
-
       });
     }
     if (this.state.i == this.state.maxI - 1) {
@@ -70,16 +87,37 @@ class App extends React.Component {
         this.removeItem(0);
       });
   }
+  alertClicked() {
+    alert('You clicked the third ListGroupItem');
+}
 
   render() {
     return (
       <div>
-        <ul>
-          {this.state.hits.map(hit => <li key={hit.id}> {hit.name} </li>)}
-        </ul>
-        <button onClick={this.onClickHandler.bind(this)}>
-          {this.state.text}
-        </button>
+        <Navbar color="light" light expand="lg">
+          <NavbarBrand href="/">medigunwo</NavbarBrand>
+        </Navbar>
+        <Container>
+          <Row />
+          <Row>
+            <Col>Menumenu</Col>
+          </Row>
+          <Row>
+            <Col sm="12" md={{size: 8, offset: 2}}>
+              <ListGroup>
+                {this.state.hits.map(hit => (
+                  <ListGroupItem tag="a" action key={hit.id} onClick={this.alertClicked.bind(this)}> {hit.name} </ListGroupItem>
+                ))}
+              </ListGroup>
+              <Button color="danger" onClick={this.onClickHandler.bind(this)}>
+                {this.state.text}
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col>Piekny koniec</Col>
+          </Row>
+        </Container>
       </div>
     );
   }
