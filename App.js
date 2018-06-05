@@ -7,7 +7,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 	this.medicComponent = this.medicComponent.bind(this)
-	
+	this.observComponent = this.observComponent.bind(this)
     this.state = {
       hits: [],
       i: 1,
@@ -87,38 +87,16 @@ class App extends React.Component {
           patientData
         })
 		this.setState({renP:1})
-		
-		console.log("medi",this.medicRequest(new Date("2010-01-01"),new Date("2016-01-01")))
-		
-		console.log(this.obsRequest())
-		
       })
-	  
 	  this.render()
   }
   
-  obsRequest(dateStart,dateEnd){
+  observComponent({dateStart,dateEnd}){
 	  var observs = []
-		var obsts = this.state.patientData.observations
-	if(!(obsts === undefined)){	 
-		for(var i =0; i<obsts.length;i++){
-			///////////////////////////////
-			var obst = obsts[i]
-			
-			var kategoria = obst.category[0].coding[0].code
-			var rodzaj = obst.code.text
-			if(!(obst.context === undefined)){
-				var context = obst.context.reference
-			}else var context = "- - -"
-			var dateTime = obst.effectiveDateTime
-			var dataWydania = obst.issued
-			var lastUpdate = obst.meta.lastUpdated
-			if(!(obst.valueQuantity===undefined)){
-				var wynik = obst.valueQuantity.value+' '+obst.valueQuantity.unit
-			}else var wynik = "- - -"
-			///////////////////////////////
-			
-			observs.push({'time':new Date(obsts[i].effectiveDateTime),'data':obsts[i]})
+	  var obsts = this.state.patientData.observations
+	  if(!(obsts === undefined)){	 
+		for(var i =0; i<obsts.length;i++){	
+			observs.push({'id':i,'time':new Date(obsts[i].effectiveDateTime),'data':obsts[i]})
 		}
 	  }
 	  observs.sort((a,b)=>a.time > b.time)
@@ -128,44 +106,24 @@ class App extends React.Component {
 	  }
 	  if(!(dateEnd === undefined)){		//jeżeli jest enddate
 		observs=observs.filter(function(x){ return x.time <= dateEnd})
-	  }	  
-	  
-	  return observs
-  }
-  
-  medicRequest(dateStart,dateEnd){
-	  var mediReq = []
-	  var medicationRequests = this.state.patientData.medication_requests
-	  if(!(medicationRequests === undefined)){
-		  for(var i=0;i<medicationRequests.length;i++){
-			  
-			  ///////////////////////////////
-			  var mR = medicationRequests[i]
-			  
-			  var dataAutoryzacji = mR.authoredOn
-			  var context = mR.context.reference
-			  var szczegoly = mR.extension[0].valueCodeableConcept.text
-			  var medicationCodeableConcept	= mR.medicationCodeableConcept.text
-			  var intent = mR.intent
-			  var lastUpdate = mR.meta.lastUpdated
-			  var resourceType = mR.resourceType
-			  var status = mR.status
-			  ///////////////////////////////
-			  
-			  mediReq.push({'time':new Date(medicationRequests[i].authoredOn),'data':medicationRequests[i]})
-		  }
 	  }
-	  mediReq.sort((a,b)=>a.time > b.time)
-	  
-	  if(!(dateStart === undefined)){	//jeżeli jest startdate
-		mediReq=mediReq.filter(function(x){ return x.time >= dateStart})
-	  }
-	  if(!(dateEnd === undefined)){		//jeżeli jest enddate
-		mediReq=mediReq.filter(function(x){ return x.time <= dateEnd})
-	  }	  
-	  return mediReq
+	  return(
+		<div>
+			<h1>Observ</h1>
+			{observs.map( obs =>
+			<div key ={obs.id} >
+				<h2> Data: {obs.time.toString() } </h2>
+				<p> Kategoria: { obs.data.category[0].coding[0].code } </p>
+				<p> Rodzaj: { obs.data.code.text } </p>
+				<p> Data: { obs.data.effectiveDateTime } </p>
+				<p> Data wydania: { obs.data.issued } </p>
+				<p> Wynik: { obs.data.valueQuantity===undefined? "- - -":obs.data.valueQuantity.value+' '+obs.data.valueQuantity.unit } </p>
+				<p> Ostatnia aktualizacja: { obs.data.meta.lastUpdated } </p>
+			</div>
+			)}
+		</div>
+	  )
   }
-  
   
   medicComponent({dateStart,dateEnd}){
 	  var mediReq = []
@@ -183,15 +141,13 @@ class App extends React.Component {
 	  if(!(dateEnd === undefined)){		//jeżeli jest enddate
 		mediReq=mediReq.filter(function(x){ return x.time <= dateEnd})
 	  }
-	  console.log("kokos",mediReq)
 	  return(
 		<div>
 			<h1>Medi</h1>
 			{mediReq.map(medi =>
 			<div key= {medi.id}>
-				<h1>Data: { medi.time.toString() } </h1>
+				<h2>Data: { medi.time.toString() } </h2>
 				<p>Data autoryzacji: {medi.data.authoredOn }</p>
-				<p>Kontekst: { medi.data.context.reference}</p>
 				<p>Szczegóły: { medi.data.extension[0].valueCodeableConcept.text}</p>
 				<p>MedicationCodeableConcept: { medi.data.medicationCodeableConcept.text}</p>
 				<p>Intencja: {medi.data.intent }</p>
@@ -259,6 +215,7 @@ class App extends React.Component {
 		  </div>
 		  <button onClick={this.onClick3.bind(this)}> Wróć </button>
 			  <this.medicComponent/>
+			  <this.observComponent/>
 		 </div>
 		)
   }
