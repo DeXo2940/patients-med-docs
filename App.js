@@ -15,6 +15,7 @@ class App extends React.Component {
       text: "Nastepna strona",
 	  
 	  patientData: [],
+	  patientOrg: [],
 	  renP : 0
     };
 	
@@ -22,7 +23,6 @@ class App extends React.Component {
 	
 
   onClickHandler() {
-    console.log(this.state.i + " " + this.state.maxI);
     if (this.state.i < this.state.maxI) {
       this.setState({
         i: this.state.i + 1,
@@ -87,7 +87,20 @@ class App extends React.Component {
           patientData
         })
 		this.setState({renP:1})
+		console.log('= = =')
+		var oid = this.state.patientData.patient.generalPractitioner[0].reference
+		  fetch(API+'/'+oid)
+		  .then(response => response.json())
+		  .then(patientOrg => {
+			this.setState({
+				patientOrg
+			})
+			console.log(patientOrg)
+		})
       })
+	  
+	  
+	  
 	  this.render()
   }
   
@@ -128,7 +141,6 @@ class App extends React.Component {
   medicComponent({dateStart,dateEnd}){
 	  var mediReq = []
 	  var medicationRequests = this.state.patientData.medication_requests
-	  console.log(medicationRequests)
 	  if(!(medicationRequests === undefined)){
 		  for(var i=0;i<medicationRequests.length;i++){
 			  mediReq.push({'id':i,'time':new Date(medicationRequests[i].authoredOn),'data':medicationRequests[i]})
@@ -193,7 +205,7 @@ class App extends React.Component {
 			
 			<p>Język: {this.state.patientData.patient.communication[0].language.coding[0].display} </p>
 			<p>Numer ubezpieczenia: {this.state.patientData.patient.extension[8].valueString} </p>
-			<p>Lekarz rodzinny: {this.state.patientData.patient.generalPractitioner[0].reference} </p>
+			<p>Lekarz rodzinny: {this.state.patientOrg.name} </p>
 			<p>Czy wymagana opieka: {this.state.patientData.patient.extension[5].valueBoolean===true?'Tak':'Nie'} </p>
 			<p>Stan cywilny: {this.state.patientData.patient.maritalStatus.text} </p>
 			

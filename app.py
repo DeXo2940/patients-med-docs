@@ -2,6 +2,9 @@ from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
 from fhirclient import client
 import fhirclient.models.patient as p
+import fhirclient.models.observation as o
+import fhirclient.models.medicationrequest as mr
+import fhirclient.models.organization as org
 import urllib.request
 import json
 
@@ -29,35 +32,50 @@ if __name__ == '__main__':
 @app.route('/list/', defaults={'page': 0})
 def get_patients_page(page):
     filt = request.args.get('surname', default='', type=str)
-    ask = {
-        '_count': str(DEF_COUNT),
-        '_getpagesoffset': str(int(page)*int(DEF_COUNT)),
-        'family': filt
-    }
+    ask = {'_count': str(DEF_COUNT),
+           '_getpagesoffset': str(int(page)*int(DEF_COUNT)),
+           'family': filt }
     total = get_total(filt)
-    result = []
+
+    result = [{'pagecount': str(((total-1)//20)+1)}]
 
     if ((total-1)//20) < int(page) or int(page)<0:
         return redirect("list")
-    i = 0
+
     for patient in p.Patient.where(ask).perform_resources(smart.server):
         result.append({'name': smart.human_name(patient.name[0]),
                        'id': patient.id})
-        i += 1
-    return jsonify({'pagecount': str(((total-1)//20)+1), 'patients': result})
+    return jsonify(result)
 
+
+@app.route('/Organization/<oid>')
+def get_org_name(oid):
+    try:
+        organization = org.Organization.read(oid, smart.server)
+        return jsonify({'id': oid, 'name': organization.type[0].text})
+    except:
+        return redirect('list')
 
 @app.route('/patient/<pid>')
 def get_patient_info(pid):
+    ask = {'subject': pid}
     try:
-        total = int(get_total_patient(pid))
-        with urllib.request.urlopen(settings['api_base'] +
-                                    '/Patient/'+pid+'/$everything?_format=json' +
-                                    '&_count=' + str(total)) as url:
-            data = json.loads(url.read().decode())
-            return jsonify(data['entry'])
+        patient = p.Patient.read(pid, smart.server)
+
+        observations = []
+        for observation in o.Observation.where(ask).perform_resources(smart.server):
+            observations.append(observation.as_json())
+
+        medication_requests = []
+        for medication_request in mr.MedicationRequest.where(ask).perform_resources(smart.server):
+            medication_requests.append(medication_request.as_json())
+
+        return jsonify({'patient': patient.as_json(),
+                        'observations': observations,
+                        'medication_requests': medication_requests})
     except:
         return redirect("list")
+
 
 @app.errorhandler(500)
 def internal_error(error):
@@ -83,6 +101,7 @@ def get_total(filt):
             return total
     except:
         return 0
+
 
 def get_total_patient(pid):
     try:
