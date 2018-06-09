@@ -15,12 +15,23 @@ import {
   NavLink,
   UncontrolledDropdown,
   DropdownToggle,
-   TabContent,TabPane, CardTitle,CardText,Form, FormGroup, Label, Input
+  TabContent,
+  TabPane,
+  CardTitle,
+  CardText,
+  Form,
+  FormGroup,
+  Label,
+  Input
 } from "reactstrap";
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
 import {CardBody, Card} from "reactstrap";
 import cat from "./cat.jpg";
 import icon from "./icon.png";
-import classnames from 'classnames';
+
+import i from "./ic.png";
+import classnames from "classnames";
 
 const API = "http://127.0.0.1:5000";
 
@@ -41,7 +52,8 @@ class App extends React.Component {
       collapse3: false,
       patientData: [],
       renP: 0,
-      filt: null
+      filt: null,
+      timel: null
     };
   }
   toggle() {
@@ -135,10 +147,18 @@ class App extends React.Component {
       <div>
         <h2> Informacje o pacjencie </h2>
         <div>
-          <p><strong className="text-muted">Imię:</strong> {this.state.patientData.patient.name[0].given[0]} </p>
-          <p><strong className="text-muted">Nazwisko:</strong> {this.state.patientData.patient.name[0].family} </p>
           <p>
-            <strong className="text-muted">Płeć podczas narodzin/obecnie:</strong>{" "}
+            <strong className="text-muted">Imię:</strong>{" "}
+            {this.state.patientData.patient.name[0].given[0]}{" "}
+          </p>
+          <p>
+            <strong className="text-muted">Nazwisko:</strong>{" "}
+            {this.state.patientData.patient.name[0].family}{" "}
+          </p>
+          <p>
+            <strong className="text-muted">
+              Płeć podczas narodzin/obecnie:
+            </strong>{" "}
             {this.state.patientData.patient.extension[4].valueCode == "F"
               ? "Kobieta"
               : "Mężczyzna"}/
@@ -161,7 +181,8 @@ class App extends React.Component {
               <Card>
                 <CardBody>
                   <p>
-                    <strong className="text-muted">Data urodzenia:</strong> {this.state.patientData.patient.birthDate}{" "}
+                    <strong className="text-muted">Data urodzenia:</strong>{" "}
+                    {this.state.patientData.patient.birthDate}{" "}
                   </p>
                   <p>
                     <strong className="text-muted">Miejsce urodzenia:</strong>{" "}
@@ -199,11 +220,11 @@ class App extends React.Component {
                   <CardBody>
                     {" "}
                     <p>
-                  <strong className="text-muted">    Matka:</strong>{" "}
+                      <strong className="text-muted"> Matka:</strong>{" "}
                       {this.state.patientData.patient.extension[3].valueString}{" "}
                     </p>
                     <p>
-                    <strong className="text-muted">  Ojciec:</strong>{" "}
+                      <strong className="text-muted"> Ojciec:</strong>{" "}
                       {
                         this.state.patientData.patient.extension[7]
                           .valueHumanName.text
@@ -214,7 +235,7 @@ class App extends React.Component {
               </Collapse>
             </div>
             <p>
-          <strong className="text-muted">    Rasa, Grupa etniczna:</strong>{" "}
+              <strong className="text-muted"> Rasa, Grupa etniczna:</strong>{" "}
               {
                 this.state.patientData.patient.extension[0].valueCodeableConcept
                   .coding[0].display
@@ -234,7 +255,7 @@ class App extends React.Component {
             }{" "}
           </p>
           <p>
-  <strong className="text-muted">          Numer ubezpieczenia:</strong>{" "}
+            <strong className="text-muted"> Numer ubezpieczenia:</strong>{" "}
             {this.state.patientData.patient.extension[8].valueString}{" "}
           </p>
           <p>
@@ -248,7 +269,8 @@ class App extends React.Component {
               : "Nie"}{" "}
           </p>
           <p>
-          <strong className="text-muted">  Stan cywilny:</strong> {this.state.patientData.patient.maritalStatus.text}{" "}
+            <strong className="text-muted"> Stan cywilny:</strong>{" "}
+            {this.state.patientData.patient.maritalStatus.text}{" "}
           </p>
 
           <div>
@@ -259,37 +281,42 @@ class App extends React.Component {
               style={{marginBottom: "1rem"}}
             >
               {" "}
-            <strong className="text-muted">  Dane adresowe #RODO</strong>
+              <strong className="text-muted"> Dane adresowe #RODO</strong>
             </Button>{" "}
             {""}
             <Collapse isOpen={this.state.collapse}>
               <Card>
                 <CardBody>
                   <p>
-                  <strong className="text-muted">  Kraj: </strong> {this.state.patientData.patient.address[0].country}{" "}
+                    <strong className="text-muted"> Kraj: </strong>{" "}
+                    {this.state.patientData.patient.address[0].country}{" "}
                   </p>
                   <p>
-                <strong className="text-muted">    Stan: </strong> {this.state.patientData.patient.address[0].state}{" "}
+                    <strong className="text-muted"> Stan: </strong>{" "}
+                    {this.state.patientData.patient.address[0].state}{" "}
                   </p>
                   <p>
-                  <strong className="text-muted">  Miasto: </strong> {this.state.patientData.patient.address[0].city}{" "}
+                    <strong className="text-muted"> Miasto: </strong>{" "}
+                    {this.state.patientData.patient.address[0].city}{" "}
                   </p>
                   <p>
-                  <strong className="text-muted">  Kod pocztowy: </strong>{" "}
+                    <strong className="text-muted"> Kod pocztowy: </strong>{" "}
                     {this.state.patientData.patient.address[0].postalCode}{" "}
                   </p>
                   <p>
-                  <strong className="text-muted">  Adres:</strong> {this.state.patientData.patient.address[0].line[0]}{" "}
+                    <strong className="text-muted"> Adres:</strong>{" "}
+                    {this.state.patientData.patient.address[0].line[0]}{" "}
                   </p>
                   <p>
-                  <strong className="text-muted">  Adres2: </strong>{" "}
+                    <strong className="text-muted"> Adres2: </strong>{" "}
                     {this.state.patientData.patient.address[0].line[1] ===
                     undefined
                       ? "- - -"
                       : this.state.patientData.patient.address[0].line[1]}{" "}
                   </p>
                   <p>
-                  <strong className="text-muted">  Telefon: </strong> {this.state.patientData.patient.telecom[0].value}{" "}
+                    <strong className="text-muted"> Telefon: </strong>{" "}
+                    {this.state.patientData.patient.telecom[0].value}{" "}
                   </p>
                 </CardBody>
               </Card>
@@ -297,19 +324,19 @@ class App extends React.Component {
           </div>
 
           <p>
-          <strong className="text-muted">  Czy osoba fikcyjna: </strong>{" "}
+            <strong className="text-muted"> Czy osoba fikcyjna: </strong>{" "}
             {this.state.patientData.patient.extension[6].valueBoolean == true
               ? "Tak"
               : "Nie"}{" "}
           </p>
           <p>
-          <strong className="text-muted">  Data śmierci: </strong>{" "}
+            <strong className="text-muted"> Data śmierci: </strong>{" "}
             {this.state.patientData.patient.deceasedDateTime === undefined
               ? "- - -"
               : this.state.patientData.patient.deceasedDateTime}{" "}
           </p>
           <p>
-          <strong className="text-muted">  Ostatnia aktualizacja: </strong>{" "}
+            <strong className="text-muted"> Ostatnia aktualizacja: </strong>{" "}
             {this.state.patientData.patient.meta.lastUpdated}{" "}
           </p>
         </div>
@@ -337,7 +364,9 @@ class App extends React.Component {
     );
   }
   photo() {
-    return <img style={{border: '1px dashed #021a40'}} width="100%" src={cat} />;
+    return (
+      <img style={{border: "1px dashed #021a40"}} width="100%" src={cat} />
+    );
   }
 
   b1() {
@@ -348,84 +377,181 @@ class App extends React.Component {
     );
   }
 
+  tl() {
+    this.setState({timel: 1})
+    this.render()
+  }
+
   b2() {
-    return (
+    return (<span>
       <Button color="link" onClick={this.onClick3.bind(this)}>
         Wróć
       </Button>
+      <Button color="link" onClick={this.tl.bind(this)}>Oś czasu</Button></span>
     );
   }
 
-  filter (but) {
-      return (
-      <div>  {but}
-      <Form onSubmit={this.fi} inline className="float-right">
-        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+  b3() {
+    return (
+      <Button color="link" onClick={this.onCl.bind(this)}>Wróć do pacjenta</Button>
+    )
+  }
 
-          <Label for="exampleEmail" className="mr-sm-2">Wyszukaj po nazwisku: </Label>
-          <Input name="surname" value={this.state.filt} id="exampleEmail" onChange={this.fi.bind(this)} placeholder="nazwisko" />
-        </FormGroup></Form>
-      </div>)
-
+  onCl() {
+    this.setState({timel: null})
+    this.render()
+  }
+  filter(but) {
+    return (
+      <div>
+        {" "}
+        {but}
+        <Form onSubmit={this.fi} inline className="float-right">
+          <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+            <Label for="exampleEmail" className="mr-sm-2">
+              Wyszukaj po nazwisku:{" "}
+            </Label>
+            <Input
+              name="surname"
+              value={this.state.filt}
+              id="exampleEmail"
+              onChange={this.fi.bind(this)}
+              placeholder="nazwisko"
+            />
+          </FormGroup>
+        </Form>
+      </div>
+    );
   }
 
   handleChange(event) {
-    this.setState({fi: event.target.value})
-}
+    this.setState({fi: event.target.value});
+  }
 
   fi(event) {
-    this.handleChange(event)
-  fetch(API + "/list/?surname="+this.state.fi)
-    .then(response => response.json())
-    .then(hits => {
-      this.setState({
-        hits
+    this.handleChange(event);
+    fetch(API + "/list/?surname=" + this.state.fi)
+      .then(response => response.json())
+      .then(hits => {
+        this.setState({
+          hits
+        });
+        this.removeItem(0);
+        console.log(hits);
       });
-      this.removeItem(0);
-      console.log(hits)
-    });
+  }
+
+  timeline() {
+    return(
+   <VerticalTimeline>
+     <VerticalTimelineElement
+       className="vertical-timeline-element--work"
+       date="2011 - present"
+       iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+       icon ={      <img width="100%" src={i} />
+}
+     >
+       <h3 className="vertical-timeline-element-title">Creative Director</h3>
+       <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
+       <p>
+         Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+       </p>
+     </VerticalTimelineElement>
+     <VerticalTimelineElement
+       className="vertical-timeline-element--work"
+       date="2010 - 2011"
+       iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+     >
+       <h3 className="vertical-timeline-element-title">Art Director</h3>
+       <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+       <p>
+         Creative Direction, User Experience, Visual Design, SEO, Online Marketing
+       </p>
+     </VerticalTimelineElement>
+     <VerticalTimelineElement
+       className="vertical-timeline-element--work"
+       date="2008 - 2010"
+       iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+     >
+       <h3 className="vertical-timeline-element-title">Web Designer</h3>
+       <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
+       <p>
+         User Experience, Visual Design
+       </p>
+     </VerticalTimelineElement>
+     <VerticalTimelineElement
+       className="vertical-timeline-element--education"
+       date="2006 - 2008"
+
+           iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}     >
+       <h3 className="vertical-timeline-element-title">Web Designer</h3>
+       <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+       <p>
+         User Experience, Visual Design
+       </p>
+     </VerticalTimelineElement>
+
+   </VerticalTimeline>
+ )
   }
 
   render() {
     var func;
     var photo;
-    var filter, but;
-    if (this.state.renP == 0 & this.state.filt == null) {
+    var filter, but, b2;
+    var timeline;
+    if ((this.state.renP == 0) & (this.state.filt == null)) {
       func = this.listComponent();
       photo = null;
       but = this.b1();
-      filter=this.filter(but)
+      filter = this.filter(but);
+      timeline=null
+      b2=null
     } else {
-      if(this.state.filt != null) {
-        func = this.listComponent()
-        photo = null
-        but = this.b2()
-        filter = this.filter(but)
+      if (this.state.filt != null) {
+        func = this.listComponent();
+        photo = null;
+        but = this.b2();
+        filter = this.filter(but);
+        timeline=null
+        b2= null
+      } else {
+        if (this.state.timel != null) {
+          func = this.timeline()
+          filter = null
+          photo = null
+          b2 = this.b3()
+        }
+        else {
+        func = this.patientComponent();
+        photo = this.photo();
+        but = this.b2();
+        filter = but;
+        timeline=null
+        b2=null
       }
-      else {
-      func = this.patientComponent();
-      photo = this.photo();
-      but = this.b2();
-      filter=but
-
-    }}
+    }
+  }
     return (
       <div>
-        <Navbar style={{marginBottom: "1rem", borderBottom: '1px dashed #000000'}} color="light" light expand="lg">
+        <Navbar
+          style={{marginBottom: "1rem", borderBottom: "1px dashed #000000"}}
+          color="light"
+          light
+          expand="lg"
+        >
           <img width="3%" src={icon} />
           <NavbarBrand href="/">mediCATion</NavbarBrand>
         </Navbar>
         <Container>
           <Row>
             <Col sm="4" md={{size: 8, offset: 2}}>
-              {filter}
+              {filter} {b2}
             </Col>{" "}
           </Row>
           <Row>
             <Col sm="2">{photo}</Col>
-            <Col sm="8">
-              {func}
-            </Col>
+            <Col sm="8">{func}</Col>
           </Row>
           <Row>
             <Col sm="4" md={{size: 10, offset: 2}}>
